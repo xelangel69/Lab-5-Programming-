@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.route_manager"},{"l":"com.route_manager.commands"},{"l":"com.route_manager.console"},{"l":"com.route_manager.exceptions"},{"l":"com.route_manager.manager"},{"l":"com.route_manager.model"},{"l":"com.route_manager.model.asker"},{"l":"com.route_manager.util"}];updateSearchResults();

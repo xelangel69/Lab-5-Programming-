@@ -1,0 +1,34 @@
+package com.route_manager.commands;
+
+import com.route_manager.console.Console;
+import com.route_manager.manager.CollectionManager;
+
+/**
+ * Класс, представляющий консольную команду print_descending
+ * @author Ivan Kirillov
+ */
+public final class PrintDescending extends Command {
+    private final CollectionManager collectionManager;
+    private final Console console;
+
+    /**
+     * Конструктор класса команды print_descending
+     */
+    public PrintDescending(CollectionManager collectionManager, Console console) {
+        super("print_descending", "Вывести маршруты в порядке убывания");
+        this.collectionManager = collectionManager;
+        this.console = console;
+    }
+
+    @Override
+    public boolean execute(String argument) {
+        try {
+            var routes = collectionManager.getRoutes();
+            console.println(collectionManager.descendSort());
+            return true;
+        } catch (Exception e) {
+            console.printErr(e.getMessage());
+            return false;
+        }
+    }
+}
