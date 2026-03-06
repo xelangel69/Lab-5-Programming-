@@ -11,6 +11,6 @@ public class RecursionInScriptException extends RuntimeException {
 
     @Override
     public String getMessage() {
-        return "В скрипте обнаружена рекурсия!!";
+        return "В скрипте обнаружена рекурсия!";
     }
 }

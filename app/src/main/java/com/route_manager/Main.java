@@ -17,12 +17,13 @@ public class Main {
     public static void main(String[] args) {
         Console console = new Console();
 
-        console.printSuccess("УПРАВЛЕНИЕ МАРШРУТАМИ");
-
         if (args.length == 0) {
             console.println("Введите имя загружаемого файла как аргумент командной строки");
             System.exit(1);
         }
+
+        console.printSuccess("УПРАВЛЕНИЕ МАРШРУТАМИ");
+        console.printByProgram("Добро пожаловать в программу для управления маршрутами!\nДля того, чтобы узнать список доступных команд введите 'help'.");
 
         String fileName = args[0];
 
@@ -46,7 +47,7 @@ public class Main {
         commandManager.registerCommand("remove_by_id", new RemoveByID(collectionManager, console));
         commandManager.registerCommand("clear", new Clear(collectionManager, console));
         commandManager.registerCommand("save", new Save(collectionManager, fileManager, console));
-        commandManager.registerCommand("execute_script", new ExecuteScript(collectionManager, fileManager, console));
+        commandManager.registerCommand("execute_script", new ExecuteScript(collectionManager, commandManager, fileManager, console));
         commandManager.registerCommand("exit", new Exit());
         commandManager.registerCommand("add_if_max", new AddIfMax(collectionManager, console));
         commandManager.registerCommand("remove_lower", new RemoveLower(collectionManager, console));

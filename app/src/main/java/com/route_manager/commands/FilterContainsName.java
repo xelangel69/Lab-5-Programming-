@@ -33,7 +33,7 @@ public final class FilterContainsName extends Command {
                 return false;
             }
 
-            console.println("Результаты поиска:\n" + route);
+            console.print("Результаты поиска:\n" + route);
             return true;
         } catch (Exception e) {
             console.printErr(e.getMessage());

@@ -23,8 +23,7 @@ public final class PrintDescending extends Command {
     @Override
     public boolean execute(String argument) {
         try {
-            var routes = collectionManager.getRoutes();
-            console.println(collectionManager.descendSort());
+            console.print(collectionManager.descendSort());
             return true;
         } catch (Exception e) {
             console.printErr(e.getMessage());

@@ -22,7 +22,7 @@ public final class Show extends Command {
 
     @Override
     public boolean execute(String argument) {
-        console.println(collectionManager);
+        console.print(collectionManager);
         return true;
     }
 }

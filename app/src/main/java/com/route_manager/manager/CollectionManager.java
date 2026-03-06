@@ -133,30 +133,6 @@ public final class CollectionManager {
         routes.clear();
     }
 
-    ArrayList<String> scriptsList = new ArrayList<>();
-
-    public void addScript(String script) {
-        scriptsList.add(script);
-    }
-
-    public void removeScript(String script) {
-        if (scriptsList.contains(script)) {
-            scriptsList.remove(script);
-        }
-    }
-
-    public Boolean ifRecursion(String script) {
-        if (scriptsList.contains(script)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public ArrayList<String> getScriptsList() {
-        return scriptsList;
-    }
-
     @Override
     public String toString() {
         if (routes.isEmpty()) return "Коллекция пуста";
