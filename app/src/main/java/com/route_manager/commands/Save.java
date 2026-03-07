@@ -26,11 +26,9 @@ public final class Save extends Command {
     @Override
     public boolean execute(String argument) {
         var collectionToSave = collectionManager.getRoutes();
-        try {
-            fileManager.saveCollection(collectionToSave);
-        } catch (Exception e) {
-            console.printErr(e.getMessage());
-        }
+
+        fileManager.saveCollection(collectionToSave);
+
         return true;
     }
 }

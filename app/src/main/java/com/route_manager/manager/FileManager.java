@@ -45,9 +45,9 @@ public final class FileManager {
 
             mapper.writeValue(writer, wrapper);
 
-            System.out.println("Коллекция успешно сохранена!");
+            console.println("Коллекция успешно сохранена!");
         } catch (IOException e) {
-            System.err.println("Ошибка записи: " + e.getMessage());
+            console.printErr("Ошибка записи: " + e.getMessage());
         }
     }
 

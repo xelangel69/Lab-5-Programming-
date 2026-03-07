@@ -58,9 +58,7 @@ public final class CommandManager {
         Command command = commands.get(commandName);
 
         try {
-            if (command == null) {
-                throw new UnknownCommandException(commandName);
-            }
+            if (command == null) throw new UnknownCommandException("Неизвестная команда: " + commandName);
 
             command.execute(argument);
             commandList.addLast(commandName);
@@ -69,7 +67,7 @@ public final class CommandManager {
                 commandList.removeFirst();
             }
         } catch (UnknownCommandException e) {
-            console.printErr("Неизвестная команда: " + commandName);
+            console.printErr(e.getMessage());
         }
     }
 

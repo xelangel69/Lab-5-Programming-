@@ -1,6 +1,7 @@
 package com.route_manager.commands;
 
 import com.route_manager.console.Console;
+import com.route_manager.exceptions.RoutesNotFindException;
 import com.route_manager.manager.CollectionManager;
 
 import java.util.Objects;
@@ -29,14 +30,16 @@ public final class FilterContainsName extends Command {
 
             var route = collectionManager.findByName(argument);
             if (Objects.equals(route, "")) {
-                console.printErr("Нет маршрутов с такой подстрокой в названии!");
-                return false;
+                throw new RoutesNotFindException("Нет маршрутов с такой подстрокой в названии!");
             }
 
             console.print("Результаты поиска:\n" + route);
             return true;
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             console.printErr(e.getMessage());
+        } catch (RoutesNotFindException e) {
+            console.printErr(e.getMessage());
+            return false;
         }
         return false;
     }

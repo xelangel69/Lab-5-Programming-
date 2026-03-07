@@ -135,7 +135,7 @@ public final class CollectionManager {
 
     @Override
     public String toString() {
-        if (routes.isEmpty()) return "Коллекция пуста";
+        if (routes.isEmpty()) return "Коллекция пуста\n";
 
         return routes.stream()
                 .sorted(Comparator.comparing(Route::getId))

@@ -1,7 +1,6 @@
 package com.route_manager.commands;
 
 import com.route_manager.console.Console;
-import com.route_manager.exceptions.ObjectCreationErrorException;
 import com.route_manager.manager.CollectionManager;
 import com.route_manager.model.Route;
 import com.route_manager.model.asker.RouteAsker;
@@ -27,17 +26,11 @@ public final class RemoveLower extends Command {
     public boolean execute(String argument) {
         console.printByProgram("СОЗДАНИЕ ОБЪЕКТА");
 
-        try {
-            Route route = new RouteAsker(console).builder();
+        Route route = new RouteAsker(console).builder();
 
-            collectionManager.removeLower(route);
-            console.printSuccess("Объекты, меньше заданного, удалены");
+        collectionManager.removeLower(route);
+        console.printSuccess("Объекты, меньше заданного, удалены");
 
-            return true;
-
-        } catch (ObjectCreationErrorException e) {
-            System.err.println("Ошибка при создании объекта: " + e.getMessage());
-            return false;
-        }
+        return true;
     }
 }

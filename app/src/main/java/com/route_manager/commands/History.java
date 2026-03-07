@@ -23,12 +23,19 @@ public final class History extends Command {
 
     @Override
     public boolean execute(String argument) {
-        var history = commandManager.getHistory();
-        if (history.isEmpty()) throw new HistoryIsEmptyException(history.toString());
-        else {
+        try {
+            var history = commandManager.getHistory();
+            if (history.isEmpty()) throw new HistoryIsEmptyException("История команд пуста!");
+
             console.println("Последние команды:");
             history.forEach(System.out::println);
+
+            return true;
+        } catch (HistoryIsEmptyException e) {
+            console.println(e.getMessage());
         }
-        return true;
+        return false;
     }
 }
+
+

@@ -1,6 +1,7 @@
 package com.route_manager.commands;
 
 import com.route_manager.console.Console;
+import com.route_manager.exceptions.RoutesNotFindException;
 import com.route_manager.manager.CollectionManager;
 import com.route_manager.model.Route;
 import com.route_manager.model.asker.RouteAsker;
@@ -30,10 +31,7 @@ public final class UpdateByID extends Command {
             long id = Long.parseLong(argument);
 
             var route = collectionManager.findById(id);
-            if (route == null) {
-                console.printErr("Нет объекта с таким ID");
-                return false;
-            }
+            if (route == null) throw new RoutesNotFindException("Нет объекта с таким ID!");
 
             console.println("Введите новые данные для маршрута:");
             var newRoute = new RouteAsker(console).builder();
@@ -42,11 +40,15 @@ public final class UpdateByID extends Command {
 
             console.printSuccess("Маршрут обновлен!");
             return true;
-
         } catch (NumberFormatException e) {
             console.printErr("ID должен быть числом!");
-        } catch (Exception e) {
+            return false;
+        }
+        catch (IllegalArgumentException e) {
             console.printErr(e.getMessage());
+        } catch (RoutesNotFindException e) {
+            console.printErr(e.getMessage());
+            return false;
         }
         return false;
     }

@@ -1,6 +1,7 @@
 package com.route_manager.commands;
 
 import com.route_manager.console.Console;
+import com.route_manager.exceptions.RoutesNotFindException;
 import com.route_manager.manager.CollectionManager;
 
 /**
@@ -28,10 +29,7 @@ public final class RemoveByID extends Command {
             long id = Long.parseLong(argument);
 
             var route = collectionManager.findById(id);
-            if (route == null) {
-                console.printErr("нет объекта с таким ID");
-                return false;
-            }
+            if (route == null) throw new RoutesNotFindException("Нет объекта с таким ID!");
 
             collectionManager.removeElement(route);
 
@@ -40,7 +38,9 @@ public final class RemoveByID extends Command {
 
         } catch (NumberFormatException e) {
             console.printErr("ID должен быть числом!");
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
+            console.printErr(e.getMessage());
+        } catch (RoutesNotFindException e) {
             console.printErr(e.getMessage());
         }
         return false;

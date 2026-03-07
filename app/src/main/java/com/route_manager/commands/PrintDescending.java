@@ -22,12 +22,7 @@ public final class PrintDescending extends Command {
 
     @Override
     public boolean execute(String argument) {
-        try {
-            console.print(collectionManager.descendSort());
-            return true;
-        } catch (Exception e) {
-            console.printErr(e.getMessage());
-            return false;
-        }
+        console.print(collectionManager.descendSort());
+        return true;
     }
 }

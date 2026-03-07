@@ -1,7 +1,7 @@
 package com.route_manager.model.asker;
 
 import com.route_manager.exceptions.InvalidScriptInputException;
-import com.route_manager.exceptions.IsEmptyException;
+import com.route_manager.exceptions.FileIsEmptyException;
 import com.route_manager.model.Coordinates;
 import com.route_manager.model.Location;
 import com.route_manager.model.Route;
@@ -43,7 +43,7 @@ public final class RouteAsker extends Asker<Route> {
 
                 String name = Interrogator.getUserScanner().nextLine();
 
-                if (name.equals("")) throw new IsEmptyException("Имя не может быть пустым!");
+                if (name.equals("")) throw new FileIsEmptyException("Имя не может быть пустым!");
 
                 if (fileMode) console.println(name);
                 return name;

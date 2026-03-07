@@ -22,7 +22,6 @@ public final class AverageOfDistance extends Command {
 
     @Override
     public boolean execute(String argument) {
-        var routes = collectionManager.getRoutes();
         Double averageDistance = collectionManager.averageDistance();
         console.println("Среднее расстояние - " + averageDistance);
         return true;

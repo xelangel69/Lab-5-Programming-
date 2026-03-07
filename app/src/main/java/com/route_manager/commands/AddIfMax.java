@@ -1,7 +1,6 @@
 package com.route_manager.commands;
 
 import com.route_manager.console.Console;
-import com.route_manager.exceptions.ObjectCreationErrorException;
 import com.route_manager.manager.CollectionManager;
 import com.route_manager.model.Route;
 import com.route_manager.model.asker.RouteAsker;
@@ -27,20 +26,15 @@ public final class AddIfMax extends Command {
     public boolean execute(String argument) {
         console.printByProgram("СОЗДАНИЕ ОБЪЕКТА");
 
-        try {
-            Route route = new RouteAsker(console).builder();
+        Route route = new RouteAsker(console).builder();
 
-            if (route.compareTo(collectionManager.maxElement()) > 0){
-                collectionManager.inputElement(route);
+        if (route.compareTo(collectionManager.maxElement()) > 0){
+            collectionManager.inputElement(route);
 
-                console.printSuccess("Маршрут добавлен в коллекцию");
-                return true;
-            } else {
-                console.println("Маршрут не был добавлен, т.к. объект меньше максимального");
-                return false;
-            }
-        } catch (ObjectCreationErrorException e) {
-            System.err.println("Ошибка при создании объекта: " + e.getMessage());
+            console.printSuccess("Маршрут добавлен в коллекцию");
+            return true;
+        } else {
+            console.println("Маршрут не был добавлен, т.к. объект меньше максимального");
             return false;
         }
     }

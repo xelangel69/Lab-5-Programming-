@@ -8,9 +8,4 @@ public class RecursionInScriptException extends RuntimeException {
     public RecursionInScriptException(String message) {
         super(message);
     }
-
-    @Override
-    public String getMessage() {
-        return "В скрипте обнаружена рекурсия!";
-    }
 }
