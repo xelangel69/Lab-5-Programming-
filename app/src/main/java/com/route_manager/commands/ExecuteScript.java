@@ -1,11 +1,11 @@
 package com.route_manager.commands;
 
 import com.route_manager.console.Console;
+import com.route_manager.exceptions.NoArgsException;
 import com.route_manager.exceptions.RecursionInScriptException;
-import com.route_manager.manager.CollectionManager;
 import com.route_manager.manager.CommandManager;
-import com.route_manager.manager.FileManager;
-import com.route_manager.util.Interrogator;
+import com.route_manager.util.InputProvider;
+import com.route_manager.util.ScannerInputProvider;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,64 +32,47 @@ public final class ExecuteScript extends Command {
     static HashSet<String> scriptStack = new HashSet<>();
 
     @Override
-    public boolean execute(String argument) {
-
-        if (argument.isEmpty()) console.printErr("Укажите имя скрипта!");
-
-        File script = new File(argument);
-        String scriptName = script.getAbsolutePath();
-
-        if (scriptStack.contains(scriptName)) {
-            throw new RecursionInScriptException("В скрипте обнаружена рекурсия!");
-        }
-
-        scriptStack.add(scriptName);
-
+    public boolean execute(String argument, InputProvider inputProvider) {
         try {
-            try (Scanner preScanner = new Scanner(script)) {
-                while (preScanner.hasNextLine()) {
-                    String line = preScanner.nextLine().trim();
-                    String[] tokens = line.split("\\s+");
+            if (argument.isEmpty()) throw new NoArgsException("Укажите имя скрипта!");
 
-                    if (tokens[0].equals("execute_script") && tokens.length > 1) {
-                        String calledScript = new File(tokens[1]).getName();
+            File scriptFile = new File(argument);
+            String scriptName = scriptFile.getAbsolutePath();
 
-                        if (calledScript.equals(scriptName) || scriptStack.contains(calledScript)) {
-                            throw new RecursionInScriptException("В скрипте обнаружена рекурсия!");
-                        }
-                    }
-                }
-            } catch (RecursionInScriptException e) {
-                console.printErr(e.getMessage());
-                return false;
-            }
+            if (scriptStack.contains(scriptName)) throw new RecursionInScriptException("В скрипте обнаружена рекурсия: " + scriptFile.getName());
 
-            Scanner oldScanner = Interrogator.getUserScanner();
-            Scanner scriptScanner = new Scanner(script);
+            scriptStack.add(scriptName);
 
-            try {
-                Interrogator.setUserScanner(scriptScanner);
-                Interrogator.setFileMode();
+            try (Scanner scriptScanner = new Scanner(scriptFile)) {
 
-                console.printByProgram("Выполнение скрипта...");
+                InputProvider scriptProvider = new ScannerInputProvider(scriptScanner);
+
+                console.printByProgram("Выполнение скрипта: " + scriptFile.getName());
 
                 while (scriptScanner.hasNextLine()) {
-                    String line = scriptScanner.nextLine();
-                    console.printByProgram("Выполнение команды '" + line.trim().split(" ")[0] + "'");
-                    commandManager.executeCommand(line);
+                    String line = scriptScanner.nextLine().trim();
+
+                    if (line.isEmpty()) continue;
+
+                    console.printByProgram("Выполнение команды: '" + line + "'");
+                    commandManager.executeCommand(line, scriptProvider);
                     console.print("\n");
                 }
 
-                console.printSuccess("Скрипт успешно выполнен!");
+                console.printSuccess("Скрипт '" + scriptFile.getName() + "' выполнен.");
                 return true;
+
+            } catch (FileNotFoundException e) {
+                console.printErr("Файл скрипта не найден: " + argument);
+                return false;
+            } catch (Exception e) {
+                console.printErr("Ошибка при выполнении скрипта: " + e.getMessage());
+                return false;
             } finally {
-                Interrogator.setUserScanner(oldScanner);
-                Interrogator.setUserMode();
                 scriptStack.remove(scriptName);
             }
-        } catch (FileNotFoundException e) {
-            console.printErr("Файл не найден!");
-            scriptStack.remove(scriptName);
+        } catch (NoArgsException | RecursionInScriptException e) {
+            console.printErr(e.getMessage());
         }
         return false;
     }

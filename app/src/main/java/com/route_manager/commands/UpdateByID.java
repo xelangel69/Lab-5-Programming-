@@ -5,6 +5,7 @@ import com.route_manager.exceptions.RoutesNotFindException;
 import com.route_manager.manager.CollectionManager;
 import com.route_manager.model.Route;
 import com.route_manager.model.asker.RouteAsker;
+import com.route_manager.util.InputProvider;
 
 /**
  * Класс, представляющий консольную команду update {id} {element}
@@ -24,7 +25,7 @@ public final class UpdateByID extends Command {
     }
 
     @Override
-    public boolean execute(String argument) {
+    public boolean execute(String argument, InputProvider inputProvider) {
         try {
             if (argument.isEmpty()) throw new IllegalArgumentException("Введите ID маршрута!");
 
@@ -34,7 +35,7 @@ public final class UpdateByID extends Command {
             if (route == null) throw new RoutesNotFindException("Нет объекта с таким ID!");
 
             console.println("Введите новые данные для маршрута:");
-            var newRoute = new RouteAsker(console).builder();
+            var newRoute = new RouteAsker(console, inputProvider).builder();
 
             updateRoute(route, newRoute);
 

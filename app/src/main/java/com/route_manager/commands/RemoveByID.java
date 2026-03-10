@@ -3,6 +3,7 @@ package com.route_manager.commands;
 import com.route_manager.console.Console;
 import com.route_manager.exceptions.RoutesNotFindException;
 import com.route_manager.manager.CollectionManager;
+import com.route_manager.util.InputProvider;
 
 /**
  * Класс, представляющий консольную команду remove_by_id {id}
@@ -22,7 +23,7 @@ public final class RemoveByID extends Command {
     }
 
     @Override
-    public boolean execute(String argument) {
+    public boolean execute(String argument, InputProvider inputProvider) {
         try {
             if (argument.isEmpty()) throw new IllegalArgumentException("Введите ID!");
 

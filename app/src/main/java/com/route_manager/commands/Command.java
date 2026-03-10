@@ -1,5 +1,7 @@
 package com.route_manager.commands;
 
+import com.route_manager.util.InputProvider;
+
 /**
  * Абстрактный класс, представляющий класс предок для всех консольных команд
  * @author Ivan Kirillov
@@ -18,7 +20,7 @@ public abstract class Command {
         this.description = description;
     }
 
-    public abstract boolean execute(String argument);
+    public abstract boolean execute(String argument, InputProvider inputProvider);
 
     /**
      * @return сигнатура команды

@@ -2,6 +2,7 @@ package com.route_manager.commands;
 
 import com.route_manager.console.Console;
 import com.route_manager.manager.CollectionManager;
+import com.route_manager.util.InputProvider;
 
 /**
  * Класс, представляющий консольную команду clear
@@ -21,7 +22,7 @@ public final class Clear extends Command {
     }
 
     @Override
-    public boolean execute(String argument) {
+    public boolean execute(String argument, InputProvider inputProvider) {
         collectionManager.clearCollection();
 
         console.printSuccess("Коллекция очищена!");

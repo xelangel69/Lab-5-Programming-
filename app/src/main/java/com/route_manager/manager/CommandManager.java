@@ -3,6 +3,7 @@ package com.route_manager.manager;
 import com.route_manager.commands.Command;
 import com.route_manager.console.Console;
 import com.route_manager.exceptions.UnknownCommandException;
+import com.route_manager.util.InputProvider;
 
 import java.util.ArrayDeque;
 import java.util.Map;
@@ -50,7 +51,7 @@ public final class CommandManager {
      * Выполняет команду
      * @param userInput пользовательский ввод (команда (+аргумент))
      */
-    public void executeCommand(String userInput) {
+    public void executeCommand(String userInput, InputProvider inputProvider) {
         String[] tokens = userInput.trim().split("\\s", 2);
         String commandName = tokens[0];
         String argument = (tokens.length > 1) ? tokens[1] : "";
@@ -60,7 +61,7 @@ public final class CommandManager {
         try {
             if (command == null) throw new UnknownCommandException("Неизвестная команда: " + commandName);
 
-            command.execute(argument);
+            command.execute(argument, inputProvider);
             commandList.addLast(commandName);
 
             if (commandList.size() > 7) {

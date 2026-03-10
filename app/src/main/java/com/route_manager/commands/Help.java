@@ -2,6 +2,7 @@ package com.route_manager.commands;
 
 import com.route_manager.console.Console;
 import com.route_manager.manager.CommandManager;
+import com.route_manager.util.InputProvider;
 
 /**
  * Класс, представляющий консольную команду help
@@ -21,7 +22,7 @@ public final class Help extends Command {
     }
 
     @Override
-    public boolean execute(String argument) {
+    public boolean execute(String argument, InputProvider inputProvider) {
         commandManager.getCommands().values().forEach(command -> {
             console.printTable(command.getName(), command.getDescription());
         });

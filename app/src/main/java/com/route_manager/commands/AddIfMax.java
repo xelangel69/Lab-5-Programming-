@@ -4,6 +4,7 @@ import com.route_manager.console.Console;
 import com.route_manager.manager.CollectionManager;
 import com.route_manager.model.Route;
 import com.route_manager.model.asker.RouteAsker;
+import com.route_manager.util.InputProvider;
 
 /**
  * Класс, представляющий консольную команду add_if_max {element}
@@ -23,10 +24,10 @@ public final class AddIfMax extends Command {
     }
 
     @Override
-    public boolean execute(String argument) {
+    public boolean execute(String argument, InputProvider inputProvider) {
         console.printByProgram("СОЗДАНИЕ ОБЪЕКТА");
 
-        Route route = new RouteAsker(console).builder();
+        Route route = new RouteAsker(console, inputProvider).builder();
 
         if (route.compareTo(collectionManager.maxElement()) > 0){
             collectionManager.inputElement(route);

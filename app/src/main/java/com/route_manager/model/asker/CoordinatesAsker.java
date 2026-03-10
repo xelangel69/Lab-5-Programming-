@@ -3,7 +3,8 @@ package com.route_manager.model.asker;
 import com.route_manager.console.Console;
 import com.route_manager.exceptions.InvalidScriptInputException;
 import com.route_manager.model.Coordinates;
-import com.route_manager.util.Interrogator;
+import com.route_manager.util.InputProvider;
+import com.route_manager.util.ScannerInputProvider;
 
 /**
  * Класс, запрашивающий у пользователя данные для создания нового маршрута
@@ -11,12 +12,14 @@ import com.route_manager.util.Interrogator;
  */
 public final class CoordinatesAsker extends Asker<Coordinates> {
     private final Console console;
+    private final InputProvider inputProvider;
 
     /**
      * Конструктор класса
      */
-    public CoordinatesAsker(Console console) {
+    public CoordinatesAsker(Console console, InputProvider inputProvider) {
         this.console = console;
+        this.inputProvider = inputProvider;
     }
 
     /**
@@ -24,18 +27,18 @@ public final class CoordinatesAsker extends Asker<Coordinates> {
      * @return координата X
      */
     public Double askX() {
-        var fileMode = Interrogator.fileMode();
+        var isInteractive = inputProvider.isInteractive();
+
         while (true) {
             try {
-                console.print("Введите X: ");
 
-                var strX = Interrogator.getUserScanner().nextLine();
+                var strX = inputProvider.readLine("Введите X: ");
                 double x = Double.parseDouble(strX);
 
-                if (fileMode) console.println(x);
+                if (!isInteractive) console.println(x);
                 return x;
             } catch (Exception e) {
-                if (fileMode) throw new InvalidScriptInputException("Ошибка в скрипте: " + e.getMessage());
+                if (!isInteractive) throw new InvalidScriptInputException("Ошибка в скрипте: " + e.getMessage());
                 console.printErr("Ошибка ввода: " + e.getMessage());
             }
         }
@@ -46,20 +49,19 @@ public final class CoordinatesAsker extends Asker<Coordinates> {
      * @return координата Y
      */
     public Integer askY(){
-        var fileMode = Interrogator.fileMode();
+        var isInteractive = inputProvider.isInteractive();
+
         while (true) {
             try {
-                console.print("Введите Y (<= 71): ");
-
-                var strY = Interrogator.getUserScanner().nextLine();
+                var strY = inputProvider.readLine("Введите Y (<= 71): ");
                 int y = Integer.parseInt(strY);
 
                 if (y > 71) throw new IllegalArgumentException("Y должен быть меньше 71");
 
-                if (fileMode) console.println(y);
+                if (!isInteractive) console.println(y);
                 return y;
             } catch (Exception e) {
-                if (fileMode) throw new InvalidScriptInputException("Ошибка в скрипте: " + e.getMessage());
+                if (!isInteractive) throw new InvalidScriptInputException("Ошибка в скрипте: " + e.getMessage());
                 console.printErr("Ошибка ввода: " + e.getMessage());
             }
         }

@@ -6,7 +6,7 @@ import com.route_manager.model.Coordinates;
 import com.route_manager.model.Location;
 import com.route_manager.model.Route;
 import com.route_manager.console.Console;
-import com.route_manager.util.Interrogator;
+import com.route_manager.util.InputProvider;
 
 /**
  * Класс, запрашивающий у пользователя данные для создания нового маршрута
@@ -14,12 +14,14 @@ import com.route_manager.util.Interrogator;
  */
 public final class RouteAsker extends Asker<Route> {
     private final Console console;
+    private final InputProvider inputProvider;
 
     /**
      * Конструктор класса
      */
-    public RouteAsker(Console console) {
+    public RouteAsker(Console console, InputProvider inputProvider) {
         this.console = console;
+        this.inputProvider = inputProvider;
     }
 
     @Override
@@ -36,19 +38,18 @@ public final class RouteAsker extends Asker<Route> {
      * @return название маршрута
      */
     public String askName(){
-        var fileMode = Interrogator.fileMode();
+        var isInteractive = inputProvider.isInteractive();
+
         while(true){
             try {
-                if ((!Interrogator.fileMode())) console.print("Введите название маршрута: ");
+                var name = inputProvider.readLine("Введите название маршрута: ");
 
-                String name = Interrogator.getUserScanner().nextLine();
+                if (name.isEmpty()) throw new FileIsEmptyException("Имя не может быть пустым!");
 
-                if (name.equals("")) throw new FileIsEmptyException("Имя не может быть пустым!");
-
-                if (fileMode) console.println(name);
+                if (!isInteractive) console.println(name);
                 return name;
             } catch (Exception e) {
-                if (fileMode) throw new InvalidScriptInputException("Ошибка в скрипте: " + e.getMessage());
+                if (!isInteractive) throw new InvalidScriptInputException("Ошибка в скрипте: " + e.getMessage());
                 console.printErr("Ошибка ввода: " + e.getMessage());
             }
         }
@@ -59,7 +60,7 @@ public final class RouteAsker extends Asker<Route> {
      * @return координаты (X, Y)
      */
     public Coordinates askCoordinates() {
-        var coordinatesAsker = new CoordinatesAsker(console);
+        var coordinatesAsker = new CoordinatesAsker(console, inputProvider);
         return coordinatesAsker.builder();
     }
 
@@ -68,7 +69,7 @@ public final class RouteAsker extends Asker<Route> {
      * @return координаты (X, Y, Z)
      */
     public Location askFrom() {
-        var locationAsker = new LocationFromAsker(console);
+        var locationAsker = new LocationFromAsker(console, inputProvider);
         return locationAsker.builder();
     }
 
@@ -77,7 +78,7 @@ public final class RouteAsker extends Asker<Route> {
      * @return координаты (X, Y, Z)
      */
     public Location askTo() {
-        var locationAsker = new LocationToAsker(console);
+        var locationAsker = new LocationToAsker(console, inputProvider);
         return locationAsker.builder();
     }
 
@@ -86,25 +87,24 @@ public final class RouteAsker extends Asker<Route> {
      * @return дистанция маршрута
      */
     public Float askDistance() {
-        var fileMode = Interrogator.fileMode();
+        var isInteractive = inputProvider.isInteractive();
+
         while(true){
             try {
-                if ((!Interrogator.fileMode())) console.print("Введите дистанцию (> 1): ");
-
-                var strDistance = Interrogator.getUserScanner().nextLine().trim();
+                var strDistance = inputProvider.readLine("Введите дистанцию (> 1): ");;
 
                 if (strDistance.isEmpty()) {
                     return null;
                 } else {
                     float distance = Float.parseFloat(strDistance);
 
-                    if (distance <= 1) throw new IllegalArgumentException("Число должно быть больше 1");
+                    if (distance <= 1) throw new IllegalArgumentException("Число должно быть больше 1!");
 
-                    if (fileMode) console.println(distance);
+                    if (!isInteractive) console.println(distance);
                     return distance;
                 }
             } catch (Exception e) {
-                if (fileMode) throw new InvalidScriptInputException("Ошибка в скрипте: " + e.getMessage());
+                if (!isInteractive) throw new InvalidScriptInputException("Ошибка в скрипте: " + e.getMessage());
                 console.printErr("Ошибка ввода: " + e.getMessage());
             }
         }

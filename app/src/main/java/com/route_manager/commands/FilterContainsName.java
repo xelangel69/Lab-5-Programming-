@@ -3,6 +3,7 @@ package com.route_manager.commands;
 import com.route_manager.console.Console;
 import com.route_manager.exceptions.RoutesNotFindException;
 import com.route_manager.manager.CollectionManager;
+import com.route_manager.util.InputProvider;
 
 import java.util.Objects;
 
@@ -24,7 +25,7 @@ public final class FilterContainsName extends Command {
     }
 
     @Override
-    public boolean execute(String argument) {
+    public boolean execute(String argument, InputProvider inputProvider) {
         try {
             if (argument.isEmpty()) throw new IllegalArgumentException("Нужно ввести подстроку!");
 

@@ -10,5 +10,4 @@ public interface ConsoleFunctions {
     void printErr(Object obj);
     void printSuccess(Object obj);
     void printByProgram(Object obj);
-    void PC();
 }

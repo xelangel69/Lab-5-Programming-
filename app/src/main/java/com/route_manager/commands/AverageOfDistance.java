@@ -2,6 +2,7 @@ package com.route_manager.commands;
 
 import com.route_manager.console.Console;
 import com.route_manager.manager.CollectionManager;
+import com.route_manager.util.InputProvider;
 
 /**
  * Класс, представляющий консольную команду average_of_distance
@@ -21,7 +22,7 @@ public final class AverageOfDistance extends Command {
     }
 
     @Override
-    public boolean execute(String argument) {
+    public boolean execute(String argument, InputProvider inputProvider) {
         Double averageDistance = collectionManager.averageDistance();
         console.println("Среднее расстояние - " + averageDistance);
         return true;

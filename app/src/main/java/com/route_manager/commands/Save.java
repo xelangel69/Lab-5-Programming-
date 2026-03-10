@@ -3,6 +3,7 @@ package com.route_manager.commands;
 import com.route_manager.console.Console;
 import com.route_manager.manager.CollectionManager;
 import com.route_manager.manager.FileManager;
+import com.route_manager.util.InputProvider;
 
 /**
  * Класс, представляющий консольную команду save
@@ -24,7 +25,7 @@ public final class Save extends Command {
     }
 
     @Override
-    public boolean execute(String argument) {
+    public boolean execute(String argument, InputProvider inputProvider) {
         var collectionToSave = collectionManager.getRoutes();
 
         fileManager.saveCollection(collectionToSave);

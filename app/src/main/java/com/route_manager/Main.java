@@ -6,18 +6,22 @@ import com.route_manager.exceptions.FileIsEmptyException;
 import com.route_manager.exceptions.NoArgsException;
 import com.route_manager.manager.*;
 import com.route_manager.model.Route;
-import com.route_manager.util.Interrogator;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Console console = new Console();
+        Console console = null;
 
         try {
+            Terminal terminal = TerminalBuilder.builder().system(true).build();
+            console = new Console(terminal);
+
             if (args.length == 0) throw new  NoArgsException("Введите имя загружаемого файла как аргумент командной строки");
 
             String fileName = args[0];
@@ -25,11 +29,10 @@ public class Main {
 
             if (file.length() == 0) throw new FileIsEmptyException("Файл пустой!");
 
+            console.println("");
             console.printSuccess("УПРАВЛЕНИЕ МАРШРУТАМИ");
             console.printByProgram("Добро пожаловать в программу для управления маршрутами!\nДля того, чтобы узнать список доступных команд введите 'help'.");
 
-            Scanner scanner = new Scanner(System.in);
-            Interrogator.setUserScanner(scanner);
 
             FileManager fileManager = new FileManager(fileName, console);
             CollectionManager collectionManager = new CollectionManager();
@@ -57,17 +60,28 @@ public class Main {
             commandManager.registerCommand("filter_contains_name", new FilterContainsName(collectionManager, console));
             commandManager.registerCommand("print_descending", new PrintDescending(collectionManager, console));
 
-            AppManager appManager = new AppManager(console, commandManager);
+            AppManager appManager = new AppManager(console, commandManager, terminal);
             appManager.run();
         } catch (FileIsEmptyException e) {
-            console.printErr(e.getMessage());
+            if (console != null) {
+                console.printErr(e.getMessage());
+            } else {
+                System.err.println("Критическая ошибка: " + e.getMessage());
+            }
             System.exit(0);
         } catch (NoArgsException e) {
-            console.printErr(e.getMessage());
+            if (console != null) {
+                console.printErr(e.getMessage());
+            } else {
+                System.err.println("Критическая ошибка: " + e.getMessage());
+            }
             System.exit(1);
-        } catch (Error e) {
-            console.printErr(e.getClass().getName());
-            System.exit(1);
+        } catch (IOException e) {
+            if (console != null) {
+                console.printErr(e.getMessage());
+            } else {
+                System.err.println("Критическая ошибка: " + e.getMessage());
+            }
         }
     }
 }

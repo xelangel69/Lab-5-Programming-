@@ -1,11 +1,18 @@
 package com.route_manager.console;
 
+import org.jline.terminal.Terminal;
+
 /**
  * Класс реализующий консольный ввод/вывод
  * @author Ivan Kirillov
  */
 public final class Console implements ConsoleFunctions {
-    private static final String PC = "$ ";
+    private final Terminal terminal;
+
+    public Console(Terminal terminal) {
+        this.terminal = terminal;
+        terminal.writer().flush();
+    }
 
     /**
      * Вывод в консоль
@@ -13,8 +20,8 @@ public final class Console implements ConsoleFunctions {
      */
     @Override
     public void print(Object obj) {
-        System.out.print(obj);
-        System.out.flush();
+        terminal.writer().print(obj);
+        terminal.writer().flush();
     }
 
     /**
@@ -23,7 +30,8 @@ public final class Console implements ConsoleFunctions {
      */
     @Override
     public void println(Object obj) {
-        System.out.println(obj);
+        terminal.writer().println(obj);
+        terminal.writer().flush();
     }
 
     /**
@@ -33,7 +41,8 @@ public final class Console implements ConsoleFunctions {
      */
     @Override
     public void printTable(Object obj1, Object obj2) {
-        System.out.printf("%-45s%-1s%n", TextColors.YELLOW + "" + obj1 + TextColors.RESET, obj2);
+        terminal.writer().printf("%-45s%-1s%n", TextColors.YELLOW + "" + obj1 + TextColors.RESET, obj2);
+        terminal.writer().flush();
     }
 
     /**
@@ -42,7 +51,8 @@ public final class Console implements ConsoleFunctions {
      */
     @Override
     public void printErr(Object obj) {
-        System.out.println(TextColors.RED + "" + obj + TextColors.RESET);
+        terminal.writer().println(TextColors.RED + "" + obj + TextColors.RESET);
+        terminal.writer().flush();
     }
 
     /**
@@ -51,7 +61,8 @@ public final class Console implements ConsoleFunctions {
      */
     @Override
     public void printSuccess(Object obj) {
-        System.out.println(TextColors.GREEN + "" + obj + TextColors.RESET);
+        terminal.writer().println(TextColors.GREEN + "" + obj + TextColors.RESET);
+        terminal.writer().flush();
     }
 
     /**
@@ -60,14 +71,7 @@ public final class Console implements ConsoleFunctions {
      */
     @Override
     public void printByProgram(Object obj) {
-        System.out.println(TextColors.YELLOW + "" + obj + TextColors.RESET);
-    }
-
-    /**
-     * Символ-приглашение к вводу
-     */
-    @Override
-    public void PC() {
-        print(PC);
+        terminal.writer().println(TextColors.YELLOW + "" + obj + TextColors.RESET);
+        terminal.writer().flush();
     }
 }
