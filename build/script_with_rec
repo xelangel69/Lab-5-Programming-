@@ -1,8 +1,0 @@
-show
-remove_by_id 1
-info
-filter_contains_name test
-average_of_distance
-print_descending
-execute_script script
-history
